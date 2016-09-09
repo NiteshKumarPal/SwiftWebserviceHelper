@@ -124,7 +124,7 @@ class WebServiceHelper : NSObject{
     
         if let param: AnyObject = parameter {
             request.HTTPBody = param.dataUsingEncoding(NSUTF8StringEncoding)
-            print(NSString(data: request.HTTPBody!, encoding:NSUTF8StringEncoding))
+            printForDebugModeForDebugMode(NSString(data: request.HTTPBody!, encoding:NSUTF8StringEncoding))
         }
         
         requestHeaderSetupWith(contentType, acceptType: acceptType, authorizationType: authorizationType)
@@ -180,9 +180,9 @@ class WebServiceHelper : NSObject{
         case AUTHORIZATION_TYPE_BASIC :
             base64String = STRING_BASIC + base64String
         default:
-            print("default base64String\(base64String)")
+            printForDebugMode("default base64String\(base64String)")
         }
-        print("base64String:  \(base64String)")
+        printForDebugMode("base64String:  \(base64String)")
         request.addValue(base64String, forHTTPHeaderField: HTTP_HEADER_AUTHORIZATION)
         request.addValue(contentType, forHTTPHeaderField: HTTP_HEADER_CONTENT_TYPE)
         request.addValue(acceptType, forHTTPHeaderField: HTTP_HEADER_ACCEPT_TYPE)
@@ -356,7 +356,7 @@ class WebServiceHelper : NSObject{
         if let param = parameter {
             urlString = baseUrl + QUESTION_MARK + WebServiceHelper.getQueryStringWithParameters(param)
         }
-        print(urlString)
+        printForDebugMode(urlString)
         generateRequestWithoutAuthorizationForBaseUrl(urlString, contentType: ACCEPT_TYPE_JSON,
             acceptType: ACCEPT_TYPE_JSON,
             method: METHOD_GET)
@@ -402,7 +402,7 @@ class WebServiceHelper : NSObject{
                 method: METHOD_POST)
             do{
                 request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(parameter!, options: [])
-                print(NSString(data:request.HTTPBody!, encoding:NSUTF8StringEncoding))
+                printForDebugMode(NSString(data:request.HTTPBody!, encoding:NSUTF8StringEncoding))
             } catch let error{
                 self.delegate?.webServiceHelperApiCallError(error as NSError, serviceTag: serviceTag)
             }
@@ -425,12 +425,12 @@ class WebServiceHelper : NSObject{
         request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
         
         requestSetupForUploadImageWithParams(parameter, imageParamKey: imageParamKey, imageName: "weboImage.png", image: image, imageContentType: CONTENT_TYPE_IMAGE_PNG, requestContentType: CONTENT_TYPE_MULTIPART_FORM_DATA)
-        print(reqBody)
-        print(request.allHTTPHeaderFields)
+        printForDebugMode(reqBody)
+        printForDebugMode(request.allHTTPHeaderFields)
         if let str = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding) as? String {
-            print(str)
+            printForDebugMode(str)
         } else {
-            print("not a valid UTF-8 sequence")
+            printForDebugMode("not a valid UTF-8 sequence")
         }
         
         callWebserviceWithRequest(request, serviceTag: serviceTag)
@@ -475,9 +475,9 @@ class WebServiceHelper : NSObject{
         request.setValue(content, forHTTPHeaderField: "Content-Type")
         request.addValue(ACCEPT_TYPE_JSON, forHTTPHeaderField: "Accept")
         request.setValue("\(body.length)", forHTTPHeaderField: "Content-Length")
-        print(NSString(data: body, encoding: NSUTF8StringEncoding))
+        printForDebugMode(NSString(data: body, encoding: NSUTF8StringEncoding))
         request.HTTPBody = body
-        print(request)
+        printForDebugMode(request)
     }
     
     func generateBoundaryString() -> String {
@@ -494,5 +494,16 @@ extension NSMutableData {
         let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         appendData(data!)
         reqBody = reqBody + string
+    }
+}
+
+/**
+ Since following method is going to be used globally, for using it easily, it has been put outside.
+ 
+ - parameter object: it will any object passed to it.
+ */
+func printForDebugModeForDebugMode<T>(object: T) {
+    if _isDebugAssertConfiguration() {
+        printForDebugMode(object)
     }
 }
