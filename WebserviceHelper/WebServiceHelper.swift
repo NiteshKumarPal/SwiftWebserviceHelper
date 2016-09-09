@@ -97,7 +97,7 @@ class WebServiceHelper : NSObject{
     }
     
     /**
-     This method is for genreating request for given details
+     This method is for genreating request with httpBody for given details
      
      - parameter baseUrl:           webservice path url as string type
      - parameter parameter:         parameters to send with request
@@ -124,7 +124,7 @@ class WebServiceHelper : NSObject{
     }
     
     /**
-     This method is for genreating request for given details
+     This method is for genreating request without httpBody for given details
      
      - parameter baseUrl:           webservice path url as string type
      - parameter contentType:       contebt type of request
