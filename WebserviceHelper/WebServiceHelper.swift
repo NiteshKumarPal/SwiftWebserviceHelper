@@ -498,9 +498,9 @@ extension NSMutableData {
 }
 
 /**
- Since following method is going to be used globally, for using it easily, it has been put outside.
+ This method print when your app is in debug mode.
  
- - parameter object: it will any object passed to it.
+ - Parameter object:  This is generic type object.
  */
 func printForDebugModeForDebugMode<T>(object: T) {
     if _isDebugAssertConfiguration() {
