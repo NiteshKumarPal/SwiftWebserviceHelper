@@ -62,7 +62,14 @@ class WebServiceHelper : NSObject{
     let AUTHORIZATION_TYPE_BEARER = 88
     let AUTHORIZATION_TYPE_BASIC = 99
     
-    //Sometimes for autorisation it is required to have username and password to be base 64 encrypted
+    /**
+     For autorisation it is required to have username and password to be base 64 encrypted
+     
+     - parameter userName: authourised user
+     - parameter password: password for authorization
+     
+     - returns: base64String with encryption for username and password
+     */
     func getBase64StringFromCredential(userName: String, password: String) -> String{
         let basicAuthCredentials = userName + ":" + password
         let plainData = (basicAuthCredentials as NSString).dataUsingEncoding(NSASCIIStringEncoding)
